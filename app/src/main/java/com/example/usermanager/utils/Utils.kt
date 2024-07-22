@@ -1,5 +1,7 @@
 package com.example.usermanager.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import retrofit2.HttpException
 
 sealed class Resource<out T> {
@@ -23,4 +25,10 @@ fun mapHttpExceptionToDomainError(exception: HttpException): ErrorEntity {
         503 -> ErrorEntity.ServiceUnavailable
         else -> ErrorEntity.Unknown(exception.localizedMessage ?: "An error occurred")
     }
+}
+
+@Composable
+fun dimenResource(id: Int): Float {
+    val context = LocalContext.current
+    return context.resources.getDimension(id)
 }

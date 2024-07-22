@@ -11,5 +11,4 @@ class GetUsersImpl @Inject constructor(
 ) : GetUsers {
     override fun getUsers(page: Int): Flow<Resource<List<UserListItemEntity>>> =
         usersRepository.getUsers(page)
-
 }

@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">User Manager</string>
+    <string name="try_again_label">Try Again</string>
+    <string name="exit_label">Exit</string>
+    <string name="add_new_user_label">Add New User</string>
+    <string name="email_label">Email</string>
+    <string name="name_label">Name</string>
+    <string name="add_label">Add</string>
+    <string name="cancel_label">Cancel</string>
+    <string name="network_unavailable_header_label">Looks like you\'re offline.</string>
+    <string name="network_unavailable_body_label">Please check your internet connection.</string>
+    <string name="access_denied_header_label">You don\'t have permission to access this resource.</string>
+    <string name="access_denied_body_label">Please contact your system administrator.</string>
+    <string name="service_unavailable_header_label">We\'re currently experiencing technical difficulties.</string>
+    <string name="service_unavailable_body_label">Please try again later.</string>
+    <string name="user_not_found_header_label">The information you\'re looking for isn\'t available.</string>
+    <string name="user_not_found_body_label">Please check the URL or try searching for what you need.</string>
+    <string name="unknown_error_header_label">An unknown error occurred</string>
+    <string name="unknown_error_body_label">We\'re not sure what happened, but we\'re working on getting it fixed as soon as possible.</string>
 </resources>

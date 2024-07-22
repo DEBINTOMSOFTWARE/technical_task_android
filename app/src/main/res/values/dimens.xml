@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_extra_small">2dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+
+    <dimen name="font_size_extra_small">4sp</dimen>
+    <dimen name="font_size_small">6sp</dimen>
+    <dimen name="font_size_normal">8sp</dimen>
+    <dimen name="font_size_medium">10sp</dimen>
+
+    <dimen name="line_height">8sp</dimen>
+    <dimen name="app_bar_height">64dp</dimen>
+    <dimen name="show_error_action_button_width">40dp</dimen>
+    <dimen name="show_error_action_button_height">20dp</dimen>
+</resources>
