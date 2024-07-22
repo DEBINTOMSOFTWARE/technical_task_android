@@ -24,6 +24,8 @@ material = "1.6.8"
 material3 = "1.2.1"
 composeUi = "1.6.8"
 testRunner = "1.6.1"
+mockWebServer = "4.9.1"
+gson = "2.8.8"
 
 
 [libraries]
@@ -56,6 +58,8 @@ core-testing = { group = "androidx.arch.core", name = "core-testing", version.re
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 core = { group = "androidx.test", name = "core", version.ref = "core" }
 testRunner = { group = "androidx.test", name = "runner", version.ref = "testRunner"}
+mockWebServer = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockWebServer" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

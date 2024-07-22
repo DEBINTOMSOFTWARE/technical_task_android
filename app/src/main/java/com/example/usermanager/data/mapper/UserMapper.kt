@@ -1,10 +1,11 @@
 package com.example.usermanager.data.mapper
 
+import com.example.usermanager.data.model.UserListItem
 import com.example.usermanager.data.model.UserListResponse
 import com.example.usermanager.domain.model.UserListItemEntity
 
-fun UserListResponse.toDomain() : List<UserListItemEntity> {
-    return userList.map {
+fun List<UserListItem>.toDomain() : List<UserListItemEntity> {
+    return map {
         UserListItemEntity(
             email = it.email,
             gender = it.gender,
