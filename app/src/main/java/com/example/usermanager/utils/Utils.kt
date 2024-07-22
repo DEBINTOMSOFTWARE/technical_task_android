@@ -22,7 +22,7 @@ fun mapHttpExceptionToDomainError(exception: HttpException): ErrorEntity {
     return when (exception.code()) {
         404 -> ErrorEntity.NotFound
         403 -> ErrorEntity.AccessDenied
-        503 -> ErrorEntity.ServiceUnavailable
+        500 -> ErrorEntity.ServiceUnavailable
         else -> ErrorEntity.Unknown(exception.localizedMessage ?: "An error occurred")
     }
 }

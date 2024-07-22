@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -20,6 +22,24 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildFeatures {
+            buildConfig = true
+        }
+
+        val apiKeysFile = file("apikey.properties")
+        val apiKeys = Properties()
+
+        if (apiKeysFile.exists()) {
+            apiKeys.load(apiKeysFile.inputStream())
+        } else {
+            throw GradleException("API keys file not found: $apiKeysFile")
+        }
+
+        val usersKey: String = apiKeys.getProperty("USERS_KEY") ?:
+        throw GradleException("marvel_key not found in apikey.properties")
+
+        buildConfigField("String", "USERS_KEY", "\"$usersKey\"")
     }
 
     buildTypes {

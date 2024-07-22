@@ -4,6 +4,7 @@
     <string name="exit_label">Exit</string>
     <string name="add_new_user_label">Add New User</string>
     <string name="email_label">Email</string>
+    <string name="gender_label">Gender</string>
     <string name="name_label">Name</string>
     <string name="add_label">Add</string>
     <string name="cancel_label">Cancel</string>

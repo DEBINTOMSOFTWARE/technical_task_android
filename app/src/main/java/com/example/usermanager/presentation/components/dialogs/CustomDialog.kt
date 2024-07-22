@@ -10,32 +10,44 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.TextButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.example.usermanager.R
 import com.example.usermanager.presentation.components.BodySmallText
+import com.example.usermanager.presentation.components.BodyText
 import com.example.usermanager.presentation.components.HeaderText
 
 @Composable
 fun CustomDialog(
-   title: String,
-   headerContent: @Composable () -> Unit,
-   bodyContent: @Composable () -> Unit,
-   onDismiss: () -> Unit,
-   onPositiveButtonClick: () -> Unit,
-   onNegativeButtonClick: () -> Unit,
-   positiveButtonText: String,
-   negativeButtonText: String
+    title: String,
+    headerContent: @Composable () -> Unit,
+    bodyContent: @Composable () -> Unit,
+    onDismiss: () -> Unit,
+    onPositiveButtonClick: () -> Unit,
+    onNegativeButtonClick: () -> Unit,
+    positiveButtonText: String,
+    negativeButtonText: String
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title =  { HeaderText(text = title, fontWeight = FontWeight.Bold) },
+        title = {
+            BodyText(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                text = title,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
+        },
         text = {
             Column {
                 headerContent()
-                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.margin_medium)))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.margin_normal)))
                 bodyContent()
             }
         },

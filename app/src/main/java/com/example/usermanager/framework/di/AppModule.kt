@@ -1,6 +1,7 @@
 package com.example.usermanager.framework.di
 
 import android.content.Context
+import com.example.usermanager.BuildConfig
 import com.example.usermanager.data.NetworkConstants
 import com.example.usermanager.data.network.ApiService
 import com.example.usermanager.data.reposirory.UsersRepositoryImpl
@@ -24,7 +25,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-
     @Provides
     @Singleton
     fun provideCache(@ApplicationContext context: Context): Cache {
@@ -34,6 +34,7 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("onlineInterceptor")
     fun provideOnlineInterceptor(): Interceptor = Interceptor { chain ->
         val response = chain.proceed(chain.request())
         val maxAge = 60
@@ -52,14 +53,31 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("apiKeyInterceptor")
+    fun provideAuthorizationInterceptor():Interceptor = Interceptor { chain ->
+        val originalRequest = chain.request()
+        val modifiedRequest = if (originalRequest.method == "POST" || originalRequest.method == "DELETE") {
+            originalRequest.newBuilder()
+                .addHeader("Authorization", "Bearer ${BuildConfig.USERS_KEY}")
+                .build()
+        } else {
+            originalRequest
+        }
+        chain.proceed(modifiedRequest)
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
         cache: Cache,
-        onlineInterceptor: Interceptor,
+        @Named("onlineInterceptor") onlineInterceptor: Interceptor,
+        @Named("apiKeyInterceptor") apiKeyInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .cache(cache)
             .addNetworkInterceptor(onlineInterceptor)
+            .addInterceptor(apiKeyInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
 
