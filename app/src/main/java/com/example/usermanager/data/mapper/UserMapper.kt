@@ -1,12 +1,13 @@
 package com.example.usermanager.data.mapper
 
-import com.example.usermanager.data.model.UserListItem
-import com.example.usermanager.data.model.UserListResponse
-import com.example.usermanager.domain.model.UserListItemEntity
+import com.example.usermanager.data.model.AddUserRequestData
+import com.example.usermanager.data.model.UserItem
+import com.example.usermanager.domain.model.AddUserRequestDataEntity
+import com.example.usermanager.domain.model.UserItemEntity
 
-fun List<UserListItem>.toDomain() : List<UserListItemEntity> {
+fun List<UserItem>.toDomain() : List<UserItemEntity> {
     return map {
-        UserListItemEntity(
+        UserItemEntity(
             email = it.email,
             gender = it.gender,
             id = it.id,
@@ -14,4 +15,23 @@ fun List<UserListItem>.toDomain() : List<UserListItemEntity> {
             status = it.status
         )
     }
+}
+
+fun AddUserRequestDataEntity.toData() : AddUserRequestData {
+    return AddUserRequestData(
+        name = name,
+        email = email,
+        gender = gender,
+        status = status
+    )
+}
+
+fun UserItem.toDomain() : UserItemEntity {
+    return UserItemEntity(
+        email = email,
+        gender = gender,
+        id = id,
+        name = name,
+        status = status
+    )
 }

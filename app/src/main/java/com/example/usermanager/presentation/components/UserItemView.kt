@@ -10,11 +10,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.usermanager.R
-import com.example.usermanager.domain.model.UserListItemEntity
+import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.utils.dimenResource
 
 @Composable
-fun UserItemView(user: UserListItemEntity) {
+fun UserItemView(user: UserItemEntity) {
     Card(
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.padding_small))

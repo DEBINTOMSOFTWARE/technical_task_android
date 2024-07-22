@@ -1,9 +1,8 @@
 package com.example.usermanager.data.model
 
-data class UserListItem(
+data class AddUserRequestData(
+    val name: String,
     val email: String,
     val gender: String,
-    val id: Int,
-    val name: String,
     val status: String
 )

@@ -1,10 +1,15 @@
 package com.example.usermanager.data.repository
 
 import com.example.usermanager.TestConstants
-import com.example.usermanager.data.model.UserListItem
+import com.example.usermanager.addRequestData
+import com.example.usermanager.data.model.AddUserRequestData
+import com.example.usermanager.data.model.UserItem
 import com.example.usermanager.data.network.ApiService
 import com.example.usermanager.data.reposirory.UsersRepositoryImpl
+import com.example.usermanager.domain.model.AddUserRequestDataEntity
 import com.example.usermanager.domain.repository.UsersRepository
+import com.example.usermanager.userItem
+import com.example.usermanager.userList
 import com.example.usermanager.utils.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.toList
@@ -47,15 +52,6 @@ class UsersRepositoryImplTest {
 
     @Test
     fun givenAPiServiceReturnsUsers_whenGetUsersIsCalled_thenReturnUsers() = runTest {
-        val userList = listOf(
-            UserListItem(
-                email = TestConstants.EMAIL,
-                gender = TestConstants.GENDER,
-                id = TestConstants.ID,
-                name = TestConstants.NAME,
-                status = TestConstants.STATUS
-            )
-        )
         val gson = Gson()
         val userListJson = gson.toJson(userList)
         logger.info("Mock Response Body: $userListJson")
@@ -87,6 +83,7 @@ class UsersRepositoryImplTest {
     fun givenAPiServiceReturnsError_whenGetUsersIsCalled_thenReturnError() = runTest {
         val errorResponse = MockResponse()
             .setResponseCode(404)
+        mockWebServer.enqueue(errorResponse)
         val result = usersRepository.getUsers(TestConstants.PAGE).toList()
         logger.info("Repository Result: $result")
         assertEquals(2, result.size)
@@ -96,15 +93,6 @@ class UsersRepositoryImplTest {
 
     @Test
     fun givenAPiServiceReturnsError_whenGetUsersIsCalled_thenReturnError_withInFinalResponse() = runTest {
-        val userList = listOf(
-            UserListItem(
-                email = TestConstants.EMAIL,
-                gender = TestConstants.GENDER,
-                id = TestConstants.ID,
-                name = TestConstants.NAME,
-                status = TestConstants.STATUS
-            )
-        )
         val gson = Gson()
         val userListJson = gson.toJson(userList)
         logger.info("Mock Response Body: $userListJson")
@@ -117,9 +105,41 @@ class UsersRepositoryImplTest {
         mockWebServer.enqueue(initialMockResponse)
 
         val errorResponse = MockResponse()
-            .setResponseCode(503)
+            .setResponseCode(500)
+        mockWebServer.enqueue(errorResponse)
         val result = usersRepository.getUsers(TestConstants.PAGE).toList()
         logger.info("Repository Result: $result")
+        assertEquals(2, result.size)
+        assertTrue { result[0] is Resource.Loading }
+        assertTrue { result[1] is Resource.Error }
+    }
+
+    @Test
+    fun givenApiServiceReturnsData_whenAddUserIsCalled_thenReturnData() = runTest {
+        val gson = Gson()
+        val userJson = gson.toJson(userItem)
+
+        val mockResponse = MockResponse()
+            .setResponseCode(201)
+            .setBody(userJson)
+
+        mockWebServer.enqueue(mockResponse)
+
+        val result = usersRepository.addUser(addRequestData).toList()
+        assertEquals(2, result.size)
+        assertTrue { result[0] is Resource.Loading }
+        assertTrue { result[1] is Resource.Success }
+        val user = (result[1] as Resource.Success).data
+        assertEquals(TestConstants.EMAIL, user?.email)
+    }
+
+    @Test
+    fun givenApiServiceReturnsError_whenAddUserIsCalled_thenReturnError() = runTest {
+        val errorResponse = MockResponse()
+            .setResponseCode(500)
+        mockWebServer.enqueue(errorResponse)
+
+        val result = usersRepository.addUser(addRequestData).toList()
         assertEquals(2, result.size)
         assertTrue { result[0] is Resource.Loading }
         assertTrue { result[1] is Resource.Error }

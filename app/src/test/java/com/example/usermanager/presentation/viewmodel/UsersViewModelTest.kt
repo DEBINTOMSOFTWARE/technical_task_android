@@ -1,9 +1,8 @@
 package com.example.usermanager.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.compose.material.TextField
 import com.example.usermanager.TestConstants
-import com.example.usermanager.domain.model.UserListItemEntity
+import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.usecase.GetUsers
 import com.example.usermanager.presentation.UsersUIState
 import com.example.usermanager.presentation.intent.UserIntent
@@ -54,7 +53,7 @@ class UsersViewModelTest {
     @Test
     fun givenViewModel_whenLoadUsers_thenUpdatesUIStateWithUsers() = testScope.runTest {
         val users = listOf(
-            UserListItemEntity(
+            UserItemEntity(
                 email = TestConstants.EMAIL,
                 gender = TestConstants.GENDER,
                 id = TestConstants.ID,

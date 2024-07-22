@@ -1,5 +1,7 @@
 package com.example.usermanager
 
+import com.example.usermanager.domain.model.AddUserRequestDataEntity
+
 object TestConstants {
     const val EMAIL = "Jesse.pinkman@breakingbad.com"
     const val GENDER = "Male"
@@ -8,3 +10,4 @@ object TestConstants {
     const val STATUS = "Active"
     const val PAGE = 1
 }
+

@@ -33,7 +33,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavHostController
 import com.example.usermanager.MainActivity
 import com.example.usermanager.R
-import com.example.usermanager.domain.model.UserListItemEntity
+import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.presentation.components.BodyText
 import com.example.usermanager.presentation.components.UserItemView
 import com.example.usermanager.presentation.components.dialogs.AddUserDialog
@@ -170,7 +170,7 @@ fun UserListScreen(
 
 @Composable
 fun showUsersList(
-    users: List<UserListItemEntity>,
+    users: List<UserItemEntity>,
 ) {
     val usesListLabel = "Users List"
     val state = rememberLazyListState()

@@ -1,7 +1,7 @@
 package com.example.usermanager.domain.usecase
 
 import com.example.usermanager.TestConstants
-import com.example.usermanager.domain.model.UserListItemEntity
+import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.repository.UsersRepository
 import com.example.usermanager.utils.ErrorEntity
 import com.example.usermanager.utils.Resource
@@ -26,9 +26,9 @@ class GetUserImplTest {
 
     @Test
     fun givenRepositoryReturnsUsers_whenGetUsersIsCalled_thenReturnUsers() = runTest {
-        val mockResponse : Flow<Resource<List<UserListItemEntity>>> = flow {
+        val mockResponse : Flow<Resource<List<UserItemEntity>>> = flow {
             val users = listOf(
-                UserListItemEntity(
+                UserItemEntity(
                     email = TestConstants.EMAIL,
                     gender = TestConstants.GENDER,
                     id = TestConstants.ID,
@@ -50,7 +50,7 @@ class GetUserImplTest {
 
     @Test
     fun givenRepositoryReturnsError_whenGetUsersIsCalled_thenReturnError() = runTest {
-        val mockResponse : Flow<Resource<List<UserListItemEntity>>> = flow {
+        val mockResponse : Flow<Resource<List<UserItemEntity>>> = flow {
             emit(Resource.Error(ErrorEntity.Network))
         }
         coEvery { repository.getUsers(TestConstants.PAGE) } returns mockResponse
