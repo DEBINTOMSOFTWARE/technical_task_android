@@ -6,5 +6,5 @@ import com.example.usermanager.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface AddUser {
-    fun addUser(userData: AddUserRequestDataEntity) : Flow<Resource<UserItemEntity>>
+    fun addUser(userData: AddUserRequestDataEntity): Flow<Resource<UserItemEntity>>
 }

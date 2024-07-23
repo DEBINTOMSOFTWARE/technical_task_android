@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,11 +31,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.navigation.NavHostController
 import com.example.usermanager.MainActivity
 import com.example.usermanager.R
 import com.example.usermanager.domain.model.UserItemEntity
-import com.example.usermanager.presentation.components.BodyText
+import com.example.usermanager.presentation.components.HeaderText
 import com.example.usermanager.presentation.components.UserItemView
 import com.example.usermanager.presentation.components.dialogs.AddUserDialog
 import com.example.usermanager.presentation.components.dialogs.UMAlertDialog
@@ -47,7 +45,6 @@ import com.example.usermanager.utils.ErrorEntity
 
 @Composable
 fun UserListScreen(
-    navController: NavHostController,
     usersViewModel: UsersViewModel
 ) {
     val appBarTitle = stringResource(id = R.string.app_name)
@@ -57,29 +54,25 @@ fun UserListScreen(
     }
     var showAddUserDialog by remember { mutableStateOf(false) }
     var selectedUser by remember { mutableStateOf<UserItemEntity?>(null) }
-    Scaffold(
-        scaffoldState = rememberScaffoldState(),
-        topBar = {
-            TopAppBar(
-                modifier = Modifier
-                    .height(dimensionResource(id = R.dimen.app_bar_height))
-                    .semantics { contentDescription = appBarTitle },
-                title = { BodyText(text = appBarTitle) },
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                actions = {
-                    IconButton(onClick = {
-                        showAddUserDialog = true
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.surface
-                        )
-                    }
-                }
+    Scaffold(scaffoldState = rememberScaffoldState(), topBar = {
+        TopAppBar(modifier = Modifier
+            .height(dimensionResource(id = R.dimen.app_bar_height))
+            .semantics { contentDescription = appBarTitle }, title = {
+            HeaderText(
+                text = appBarTitle, color = MaterialTheme.colorScheme.surface
             )
-        }
-    ) { paddingValues ->
+        }, backgroundColor = MaterialTheme.colorScheme.primary, actions = {
+            IconButton(onClick = {
+                showAddUserDialog = true
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.surface
+                )
+            }
+        })
+    }) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,64 +86,54 @@ fun UserListScreen(
                 uiState.error != null -> {
                     when (uiState.error) {
                         ErrorEntity.Network -> {
-                            UMAlertDialog(
-                                title = stringResource(R.string.error_title_label),
+                            UMAlertDialog(title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.network_unavailable_header_label),
                                 bodyText = stringResource(id = R.string.network_unavailable_body_label),
                                 onDismiss = { },
                                 onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
-                            )
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) })
                         }
 
                         ErrorEntity.NotFound -> {
-                            UMAlertDialog(
-                                title = stringResource(R.string.error_title_label),
+                            UMAlertDialog(title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.user_not_found_header_label),
                                 bodyText = stringResource(id = R.string.user_not_found_body_label),
                                 onDismiss = { },
                                 onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
-                            )
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) })
                         }
 
                         ErrorEntity.AccessDenied -> {
-                            UMAlertDialog(
-                                title = stringResource(R.string.error_title_label),
+                            UMAlertDialog(title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.access_denied_header_label),
                                 bodyText = stringResource(id = R.string.access_denied_body_label),
                                 onDismiss = { },
                                 onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
-                            )
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) })
                         }
 
                         ErrorEntity.ServiceUnavailable -> {
-                            UMAlertDialog(
-                                title = stringResource(R.string.error_title_label),
+                            UMAlertDialog(title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.service_unavailable_header_label),
                                 bodyText = stringResource(id = R.string.service_unavailable_body_label),
                                 onDismiss = { },
                                 onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
-                            )
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) })
                         }
 
                         else -> {
-                            UMAlertDialog(
-                                title = stringResource(R.string.error_title_label),
+                            UMAlertDialog(title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.unknown_error_header_label),
                                 bodyText = stringResource(id = R.string.unknown_error_body_label),
                                 onDismiss = { },
                                 onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
-                            )
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) })
                         }
                     }
                 }
 
                 uiState.users.isNotEmpty() -> {
-                    showUsersList(users = uiState.users, onLongPressUser = { user ->
+                    ShowUsersList(users = uiState.users, onLongPressUser = { user ->
                         selectedUser = user
                     })
                 }
@@ -180,36 +163,36 @@ fun UserListScreen(
     }
 
     if (showAddUserDialog) {
-        AddUserDialog(
-            title = stringResource(id = R.string.add_new_user_label),
+        AddUserDialog(title = stringResource(id = R.string.add_new_user_label),
             onDismiss = { showAddUserDialog = false },
             onAddUser = { name, email, gender, isActive ->
                 println("Name: $name, Email: $email")
                 println("Gender: $gender, Status: $isActive")
                 usersViewModel.processIntents(
                     UserIntent.AddUser(
-                        name,
-                        email,
-                        gender,
-                        if (isActive) "Active" else "Inactive"
+                        name, email, gender, if (isActive) "Active" else "Inactive"
                     )
                 )
                 showAddUserDialog = false
-            }
-        )
+            })
     }
 }
 
 @Composable
-fun showUsersList(
-    users: List<UserItemEntity>,
-    onLongPressUser: (UserItemEntity) -> Unit
+fun ShowUsersList(
+    users: List<UserItemEntity>, onLongPressUser: (UserItemEntity) -> Unit
 ) {
     val usesListLabel = "Users List"
     val state = rememberLazyListState()
     LazyColumn(
         state = state,
-        modifier = Modifier.semantics { contentDescription = usesListLabel },
+        modifier = Modifier
+            .padding(
+                start = dimensionResource(id = R.dimen.padding_medium), end = dimensionResource(
+                    id = R.dimen.padding_medium
+                )
+            )
+            .semantics { contentDescription = usesListLabel },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {

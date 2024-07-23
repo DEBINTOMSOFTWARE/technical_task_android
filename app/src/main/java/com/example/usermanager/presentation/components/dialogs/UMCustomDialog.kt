@@ -36,7 +36,9 @@ fun UMCustomDialog(
         onDismissRequest = onDismiss,
         title = {
             BodyText(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
                 text = title,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,

@@ -5,9 +5,9 @@ import androidx.compose.ui.platform.LocalContext
 import retrofit2.HttpException
 
 sealed class Resource<out T> {
-    data object Loading: Resource<Nothing>()
-    data class Success<out T>(val data: T?): Resource<T>()
-    data class Error(val message: ErrorEntity): Resource<Nothing>()
+    data object Loading : Resource<Nothing>()
+    data class Success<out T>(val data: T?) : Resource<T>()
+    data class Error(val message: ErrorEntity) : Resource<Nothing>()
 }
 
 sealed class ErrorEntity {

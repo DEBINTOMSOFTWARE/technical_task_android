@@ -16,7 +16,7 @@ import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.utils.dimenResource
 
 @Composable
-fun UserItemView(user: UserItemEntity,  onLongPress: () -> Unit) {
+fun UserItemView(user: UserItemEntity, onLongPress: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.padding_small))

@@ -12,15 +12,13 @@ import com.example.usermanager.utils.mapHttpExceptionToDomainError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
-import retrofit2.Response
-
 import java.io.IOException
 import javax.inject.Inject
 
 class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService) :
     UsersRepository {
     override fun getUsers(page: Int): Flow<Resource<List<UserItemEntity>>> = flow {
-            emit(Resource.Loading)
+        emit(Resource.Loading)
         try {
             val initialResponse = apiService.getUsers(page)
             if (initialResponse.isSuccessful) {
@@ -52,25 +50,26 @@ class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService
         }
     }
 
-    override fun addUser(userData: AddUserRequestDataEntity): Flow<Resource<UserItemEntity>> = flow {
-        emit(Resource.Loading)
-        try {
-            val userData = userData.toData()
-            val response = apiService.addUser(userData)
-            if (response.isSuccessful) {
-                val responseData = response.body()?.toDomain()
-                emit(Resource.Success(responseData))
-            } else {
-                emit(Resource.Error(ErrorEntity.Unknown("Add User Failed")))
+    override fun addUser(userData: AddUserRequestDataEntity): Flow<Resource<UserItemEntity>> =
+        flow {
+            emit(Resource.Loading)
+            try {
+                val userData = userData.toData()
+                val response = apiService.addUser(userData)
+                if (response.isSuccessful) {
+                    val responseData = response.body()?.toDomain()
+                    emit(Resource.Success(responseData))
+                } else {
+                    emit(Resource.Error(ErrorEntity.Unknown("Add User Failed")))
+                }
+            } catch (e: HttpException) {
+                emit(Resource.Error(mapHttpExceptionToDomainError(e)))
+            } catch (e: IOException) {
+                emit(Resource.Error(ErrorEntity.Network))
+            } catch (e: Exception) {
+                emit(Resource.Error(ErrorEntity.Unknown(e.localizedMessage ?: "An error occurred")))
             }
-        } catch (e: HttpException) {
-            emit(Resource.Error(mapHttpExceptionToDomainError(e)))
-        } catch (e: IOException) {
-            emit(Resource.Error(ErrorEntity.Network))
-        } catch (e: Exception) {
-            emit(Resource.Error(ErrorEntity.Unknown(e.localizedMessage ?: "An error occurred")))
         }
-    }
 
     override fun deleteUser(userId: Int): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)

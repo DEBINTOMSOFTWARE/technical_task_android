@@ -5,5 +5,5 @@ import com.example.usermanager.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface GetUsers {
-   fun getUsers(page: Int) : Flow<Resource<List<UserItemEntity>>>
+    fun getUsers(page: Int): Flow<Resource<List<UserItemEntity>>>
 }

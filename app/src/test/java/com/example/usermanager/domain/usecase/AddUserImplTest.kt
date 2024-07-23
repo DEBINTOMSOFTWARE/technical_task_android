@@ -2,8 +2,6 @@ package com.example.usermanager.domain.usecase
 
 import com.example.usermanager.TestConstants
 import com.example.usermanager.addRequestData
-import com.example.usermanager.data.model.UserItem
-import com.example.usermanager.domain.model.AddUserRequestDataEntity
 import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.repository.UsersRepository
 import com.example.usermanager.domain.usecase.adduser.AddUser
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
 
 class AddUserImplTest {
 

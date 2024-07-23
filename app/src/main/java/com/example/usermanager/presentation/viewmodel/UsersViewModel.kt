@@ -3,9 +3,9 @@ package com.example.usermanager.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.usermanager.domain.model.AddUserRequestDataEntity
-import com.example.usermanager.domain.usecase.getusers.GetUsers
 import com.example.usermanager.domain.usecase.adduser.AddUser
 import com.example.usermanager.domain.usecase.deleteUser.DeleteUser
+import com.example.usermanager.domain.usecase.getusers.GetUsers
 import com.example.usermanager.presentation.UsersUIState
 import com.example.usermanager.presentation.intent.UserIntent
 import com.example.usermanager.utils.Resource
@@ -42,12 +42,18 @@ class UsersViewModel @Inject constructor(
 
     fun processIntents(intent: UserIntent) {
         viewModelScope.launch {
-                when (intent) {
-                    is UserIntent.LoadUsers -> loadUsers()
-                    is UserIntent.AddUser -> addUser(intent.name, intent.email, intent.gender, intent.status)
-                    is UserIntent.DeleteUser -> deleteUser(intent.userId)
-                    is UserIntent.ExitUser -> onExit()
-                }
+            when (intent) {
+                is UserIntent.LoadUsers -> loadUsers()
+                is UserIntent.AddUser -> addUser(
+                    intent.name,
+                    intent.email,
+                    intent.gender,
+                    intent.status
+                )
+
+                is UserIntent.DeleteUser -> deleteUser(intent.userId)
+                is UserIntent.ExitUser -> onExit()
+            }
         }
     }
 
@@ -92,10 +98,12 @@ class UsersViewModel @Inject constructor(
                         is Resource.Loading -> {
                             _uiState.value = _uiState.value.copy(isLoading = true)
                         }
+
                         is Resource.Success -> {
                             val newUser = resource.data
-                            if(newUser != null) {
-                                val updatedUsers =  listOf(newUser) + _uiState.value.users  // Append new user to existing list
+                            if (newUser != null) {
+                                val updatedUsers =
+                                    listOf(newUser) + _uiState.value.users  // Append new user to existing list
                                 _uiState.value = _uiState.value.copy(
                                     user = newUser,
                                     users = updatedUsers,
@@ -111,6 +119,7 @@ class UsersViewModel @Inject constructor(
                                 )
                             }
                         }
+
                         is Resource.Error -> {
                             _uiState.value = _uiState.value.copy(
                                 isLoading = false,
@@ -132,6 +141,7 @@ class UsersViewModel @Inject constructor(
                         is Resource.Loading -> {
                             _uiState.value = _uiState.value.copy(isLoading = true)
                         }
+
                         is Resource.Success -> {
                             if (_uiState.value.users.isNotEmpty()) {
                                 val updatedUsers = _uiState.value.users.filter { it.id != userId }
@@ -139,7 +149,8 @@ class UsersViewModel @Inject constructor(
                                     users = updatedUsers,
                                     isLoading = false,
                                     error = null,
-                                    user = null)
+                                    user = null
+                                )
                             } else {
                                 _uiState.value = _uiState.value.copy(
                                     users = _uiState.value.users,
@@ -149,6 +160,7 @@ class UsersViewModel @Inject constructor(
                                 )
                             }
                         }
+
                         is Resource.Error -> {
                             _uiState.value = _uiState.value.copy(
                                 isLoading = false,

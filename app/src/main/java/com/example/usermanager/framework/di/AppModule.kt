@@ -12,7 +12,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
-import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -54,15 +53,16 @@ object AppModule {
     @Provides
     @Singleton
     @Named("apiKeyInterceptor")
-    fun provideAuthorizationInterceptor():Interceptor = Interceptor { chain ->
+    fun provideAuthorizationInterceptor(): Interceptor = Interceptor { chain ->
         val originalRequest = chain.request()
-        val modifiedRequest = if (originalRequest.method == "POST" || originalRequest.method == "DELETE") {
-            originalRequest.newBuilder()
-                .addHeader("Authorization", "Bearer ${BuildConfig.USERS_KEY}")
-                .build()
-        } else {
-            originalRequest
-        }
+        val modifiedRequest =
+            if (originalRequest.method == "POST" || originalRequest.method == "DELETE") {
+                originalRequest.newBuilder()
+                    .addHeader("Authorization", "Bearer ${BuildConfig.USERS_KEY}")
+                    .build()
+            } else {
+                originalRequest
+            }
         chain.proceed(modifiedRequest)
     }
 
@@ -85,8 +85,8 @@ object AppModule {
     @Provides
     @Singleton
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
-          Retrofit.Builder()
-              .client(okHttpClient)
+        Retrofit.Builder()
+            .client(okHttpClient)
             .baseUrl(NetworkConstants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

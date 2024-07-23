@@ -5,7 +5,7 @@ import com.example.usermanager.data.model.UserItem
 import com.example.usermanager.domain.model.AddUserRequestDataEntity
 import com.example.usermanager.domain.model.UserItemEntity
 
-fun List<UserItem>.toDomain() : List<UserItemEntity> {
+fun List<UserItem>.toDomain(): List<UserItemEntity> {
     return map {
         UserItemEntity(
             email = it.email,
@@ -17,7 +17,7 @@ fun List<UserItem>.toDomain() : List<UserItemEntity> {
     }
 }
 
-fun AddUserRequestDataEntity.toData() : AddUserRequestData {
+fun AddUserRequestDataEntity.toData(): AddUserRequestData {
     return AddUserRequestData(
         name = name,
         email = email,
@@ -26,7 +26,7 @@ fun AddUserRequestDataEntity.toData() : AddUserRequestData {
     )
 }
 
-fun UserItem.toDomain() : UserItemEntity {
+fun UserItem.toDomain(): UserItemEntity {
     return UserItemEntity(
         email = email,
         gender = gender,

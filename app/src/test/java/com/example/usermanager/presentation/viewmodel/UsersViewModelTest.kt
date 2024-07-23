@@ -3,9 +3,9 @@ package com.example.usermanager.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.usermanager.TestConstants
 import com.example.usermanager.addRequestData
-import com.example.usermanager.domain.usecase.getusers.GetUsers
 import com.example.usermanager.domain.usecase.adduser.AddUser
 import com.example.usermanager.domain.usecase.deleteUser.DeleteUser
+import com.example.usermanager.domain.usecase.getusers.GetUsers
 import com.example.usermanager.presentation.UsersUIState
 import com.example.usermanager.presentation.intent.UserIntent
 import com.example.usermanager.user
@@ -78,7 +78,7 @@ class UsersViewModelTest {
 
         assertEquals(
             UsersUIState(
-               users = users,
+                users = users,
                 isLoading = false,
                 error = null
             ),
@@ -134,12 +134,14 @@ class UsersViewModelTest {
 
         assertEquals(UsersUIState(), viewModel.uiState.value)
 
-        viewModel.processIntents(UserIntent.AddUser(
-            name = TestConstants.NAME,
-            email = TestConstants.EMAIL,
-            gender = TestConstants.GENDER,
-            status = TestConstants.STATUS
-        ))
+        viewModel.processIntents(
+            UserIntent.AddUser(
+                name = TestConstants.NAME,
+                email = TestConstants.EMAIL,
+                gender = TestConstants.GENDER,
+                status = TestConstants.STATUS
+            )
+        )
         viewModel.addUser(
             name = TestConstants.NAME,
             email = TestConstants.EMAIL,
@@ -175,12 +177,14 @@ class UsersViewModelTest {
         }
 
         assertEquals(UsersUIState(), viewModel.uiState.value)
-        viewModel.onIntent(UserIntent.AddUser(
-            name = TestConstants.NAME,
-            email = TestConstants.EMAIL,
-            gender = TestConstants.GENDER,
-            status = TestConstants.STATUS
-        ))
+        viewModel.onIntent(
+            UserIntent.AddUser(
+                name = TestConstants.NAME,
+                email = TestConstants.EMAIL,
+                gender = TestConstants.GENDER,
+                status = TestConstants.STATUS
+            )
+        )
         viewModel.addUser(
             name = TestConstants.NAME,
             email = TestConstants.EMAIL,

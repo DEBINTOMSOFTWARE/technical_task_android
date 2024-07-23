@@ -28,7 +28,7 @@ class GetUserImplTest {
 
     @Test
     fun givenRepositoryReturnsUsers_whenGetUsersIsCalled_thenReturnUsers() = runTest {
-        val mockResponse : Flow<Resource<List<UserItemEntity>>> = flow {
+        val mockResponse: Flow<Resource<List<UserItemEntity>>> = flow {
             val users = listOf(
                 UserItemEntity(
                     email = TestConstants.EMAIL,
@@ -52,7 +52,7 @@ class GetUserImplTest {
 
     @Test
     fun givenRepositoryReturnsError_whenGetUsersIsCalled_thenReturnError() = runTest {
-        val mockResponse : Flow<Resource<List<UserItemEntity>>> = flow {
+        val mockResponse: Flow<Resource<List<UserItemEntity>>> = flow {
             emit(Resource.Error(ErrorEntity.Network))
         }
         coEvery { repository.getUsers(TestConstants.PAGE) } returns mockResponse

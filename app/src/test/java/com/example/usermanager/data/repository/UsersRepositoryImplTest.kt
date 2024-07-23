@@ -2,11 +2,8 @@ package com.example.usermanager.data.repository
 
 import com.example.usermanager.TestConstants
 import com.example.usermanager.addRequestData
-import com.example.usermanager.data.model.AddUserRequestData
-import com.example.usermanager.data.model.UserItem
 import com.example.usermanager.data.network.ApiService
 import com.example.usermanager.data.reposirory.UsersRepositoryImpl
-import com.example.usermanager.domain.model.AddUserRequestDataEntity
 import com.example.usermanager.domain.repository.UsersRepository
 import com.example.usermanager.userItem
 import com.example.usermanager.userList
@@ -92,27 +89,28 @@ class UsersRepositoryImplTest {
     }
 
     @Test
-    fun givenAPiServiceReturnsError_whenGetUsersIsCalled_thenReturnError_withInFinalResponse() = runTest {
-        val gson = Gson()
-        val userListJson = gson.toJson(userList)
-        logger.info("Mock Response Body: $userListJson")
+    fun givenAPiServiceReturnsError_whenGetUsersIsCalled_thenReturnError_withInFinalResponse() =
+        runTest {
+            val gson = Gson()
+            val userListJson = gson.toJson(userList)
+            logger.info("Mock Response Body: $userListJson")
 
-        val initialMockResponse = MockResponse()
-            .setResponseCode(200)
-            .setBody(userListJson)
-            .addHeader("x-pagination-pages", "2")
+            val initialMockResponse = MockResponse()
+                .setResponseCode(200)
+                .setBody(userListJson)
+                .addHeader("x-pagination-pages", "2")
 
-        mockWebServer.enqueue(initialMockResponse)
+            mockWebServer.enqueue(initialMockResponse)
 
-        val errorResponse = MockResponse()
-            .setResponseCode(500)
-        mockWebServer.enqueue(errorResponse)
-        val result = usersRepository.getUsers(TestConstants.PAGE).toList()
-        logger.info("Repository Result: $result")
-        assertEquals(2, result.size)
-        assertTrue { result[0] is Resource.Loading }
-        assertTrue { result[1] is Resource.Error }
-    }
+            val errorResponse = MockResponse()
+                .setResponseCode(500)
+            mockWebServer.enqueue(errorResponse)
+            val result = usersRepository.getUsers(TestConstants.PAGE).toList()
+            logger.info("Repository Result: $result")
+            assertEquals(2, result.size)
+            assertTrue { result[0] is Resource.Loading }
+            assertTrue { result[1] is Resource.Error }
+        }
 
     @Test
     fun givenApiServiceReturnsData_whenAddUserIsCalled_thenReturnData() = runTest {
