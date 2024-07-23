@@ -2,5 +2,11 @@ package com.example.usermanager.presentation.intent
 
 sealed class UserIntent {
     data object LoadUsers : UserIntent()
-    data object exitUser: UserIntent()
+    data class AddUser(
+        val name: String,
+        val email: String,
+        val gender: String,
+        val status: String
+    ) : UserIntent()
+    data object ExitUser: UserIntent()
 }

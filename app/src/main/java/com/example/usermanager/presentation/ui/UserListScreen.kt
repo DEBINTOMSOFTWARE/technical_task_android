@@ -17,7 +17,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +52,9 @@ fun UserListScreen(
 ) {
     val appBarTitle = stringResource(id = R.string.app_name)
     val uiState by usersViewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
+        usersViewModel.onIntent(UserIntent.LoadUsers)
+    }
     var showAddUserDialog by remember { mutableStateOf(false) }
     Scaffold(
         scaffoldState = rememberScaffoldState(),
@@ -84,10 +89,6 @@ fun UserListScreen(
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
-                uiState.users.isNotEmpty() -> {
-                    showUsersList(users = uiState.users)
-                }
-
                 uiState.error != null -> {
                     when (uiState.error) {
                         ErrorEntity.Network -> {
@@ -97,7 +98,7 @@ fun UserListScreen(
                                 bodyText = stringResource(id = R.string.network_unavailable_body_label),
                                 onDismiss = { },
                                 onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.exitUser) }
+                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
@@ -108,7 +109,7 @@ fun UserListScreen(
                                 bodyText = stringResource(id = R.string.user_not_found_body_label),
                                 onDismiss = { },
                                 onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.exitUser) }
+                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
@@ -119,7 +120,7 @@ fun UserListScreen(
                                 bodyText = stringResource(id = R.string.access_denied_body_label),
                                 onDismiss = { },
                                 onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.exitUser) }
+                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
@@ -130,7 +131,7 @@ fun UserListScreen(
                                 bodyText = stringResource(id = R.string.service_unavailable_body_label),
                                 onDismiss = { },
                                 onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.exitUser) }
+                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
@@ -141,10 +142,14 @@ fun UserListScreen(
                                 bodyText = stringResource(id = R.string.unknown_error_body_label),
                                 onDismiss = { },
                                 onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.exitUser) }
+                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
                     }
+                }
+
+                uiState.users.isNotEmpty() -> {
+                    showUsersList(users = uiState.users)
                 }
 
                 uiState.exit -> {
@@ -162,6 +167,7 @@ fun UserListScreen(
             onAddUser = { name, email, gender, isActive ->
                 println("Name: $name, Email: $email")
                 println("Gender: $gender, Status: $isActive")
+                usersViewModel.processIntents(UserIntent.AddUser(name, email, gender, if (isActive) "Active" else "Inactive"))
                 showAddUserDialog = false
             }
         )

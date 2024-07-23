@@ -2,10 +2,12 @@ package com.example.usermanager.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.usermanager.TestConstants
-import com.example.usermanager.domain.model.UserItemEntity
+import com.example.usermanager.addRequestData
 import com.example.usermanager.domain.usecase.GetUsers
+import com.example.usermanager.domain.usecase.adduser.AddUser
 import com.example.usermanager.presentation.UsersUIState
 import com.example.usermanager.presentation.intent.UserIntent
+import com.example.usermanager.user
 import com.example.usermanager.utils.ErrorEntity
 import com.example.usermanager.utils.Resource
 import io.mockk.coEvery
@@ -35,13 +37,15 @@ class UsersViewModelTest {
     private val testScope = TestScope(testDispatcher)
 
     private lateinit var getUsersUseCase: GetUsers
+    private lateinit var addUserUseCase: AddUser
     private lateinit var viewModel: UsersViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         getUsersUseCase = mockk()
-        viewModel = UsersViewModel(getUsersUseCase)
+        addUserUseCase = mockk()
+        viewModel = UsersViewModel(getUsersUseCase, addUserUseCase)
     }
 
     @After
@@ -52,15 +56,7 @@ class UsersViewModelTest {
 
     @Test
     fun givenViewModel_whenLoadUsers_thenUpdatesUIStateWithUsers() = testScope.runTest {
-        val users = listOf(
-            UserItemEntity(
-                email = TestConstants.EMAIL,
-                gender = TestConstants.GENDER,
-                id = TestConstants.ID,
-                name = TestConstants.NAME,
-                status = TestConstants.STATUS
-            )
-        )
+        val users = listOf(user)
 
         coEvery { getUsersUseCase.getUsers(TestConstants.PAGE) } returns flow {
             emit(Resource.Success(users))
@@ -72,7 +68,7 @@ class UsersViewModelTest {
         }
 
         assertEquals(UsersUIState(), viewModel.uiState.value)
-        viewModel.onIntent(UserIntent.LoadUsers)
+        viewModel.processIntents(UserIntent.LoadUsers)
         viewModel.loadUsers()
 
         advanceUntilIdle()
@@ -103,7 +99,7 @@ class UsersViewModelTest {
         }
 
         assertEquals(UsersUIState(), viewModel.uiState.value)
-        viewModel.onIntent(UserIntent.LoadUsers)
+        viewModel.processIntents(UserIntent.LoadUsers)
         viewModel.loadUsers()
 
         advanceUntilIdle()
@@ -121,5 +117,85 @@ class UsersViewModelTest {
         job.cancel()
     }
 
+    @Test
+    fun givenViewModel_whenAddUser_thenUpdatesUIStateWithUser() = testScope.runTest {
+        val user = user
+        coEvery { addUserUseCase.addUser(userData = addRequestData) } returns flow {
+            emit(Resource.Success(user))
+        }
 
+        val states = mutableListOf<UsersUIState>()
+        val job = launch {
+            viewModel.uiState.collect { state -> states.add(state) }
+        }
+
+        assertEquals(UsersUIState(), viewModel.uiState.value)
+
+        viewModel.processIntents(UserIntent.AddUser(
+            name = TestConstants.NAME,
+            email = TestConstants.EMAIL,
+            gender = TestConstants.GENDER,
+            status = TestConstants.STATUS
+        ))
+        viewModel.addUser(
+            name = TestConstants.NAME,
+            email = TestConstants.EMAIL,
+            gender = TestConstants.GENDER,
+            status = TestConstants.STATUS
+        )
+
+        advanceUntilIdle()
+
+        assertEquals(
+            UsersUIState(
+                user = user,
+                isLoading = false,
+                error = null
+            ),
+            viewModel.uiState.value
+        )
+
+        coVerify { addUserUseCase.addUser(addRequestData) }
+        job.cancel()
+    }
+
+    @Test
+    fun givenViewModel_whenAddUser_thenUpdatesUIStateWithError() = testScope.runTest {
+        coEvery { addUserUseCase.addUser(addRequestData) } returns flow {
+            emit(Resource.Error(ErrorEntity.Network))
+        }
+
+        val states = mutableListOf<UsersUIState>()
+        val job = launch {
+            viewModel.uiState.collect { state -> states.add(state) }
+        }
+
+        assertEquals(UsersUIState(), viewModel.uiState.value)
+        viewModel.onIntent(UserIntent.AddUser(
+            name = TestConstants.NAME,
+            email = TestConstants.EMAIL,
+            gender = TestConstants.GENDER,
+            status = TestConstants.STATUS
+        ))
+        viewModel.addUser(
+            name = TestConstants.NAME,
+            email = TestConstants.EMAIL,
+            gender = TestConstants.GENDER,
+            status = TestConstants.STATUS
+        )
+
+        advanceUntilIdle()
+
+        assertEquals(
+            UsersUIState(
+                user = null,
+                isLoading = false,
+                error = ErrorEntity.Network
+            ),
+            viewModel.uiState.value
+        )
+
+        coVerify { addUserUseCase.addUser(addRequestData) }
+        job.cancel()
+    }
 }
