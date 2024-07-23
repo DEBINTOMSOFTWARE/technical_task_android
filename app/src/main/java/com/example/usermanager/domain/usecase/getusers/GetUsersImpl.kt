@@ -1,4 +1,4 @@
-package com.example.usermanager.domain.usecase
+package com.example.usermanager.domain.usecase.getusers
 
 import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.repository.UsersRepository

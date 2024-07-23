@@ -20,10 +20,9 @@ import androidx.compose.ui.unit.dp
 import com.example.usermanager.R
 import com.example.usermanager.presentation.components.BodySmallText
 import com.example.usermanager.presentation.components.BodyText
-import com.example.usermanager.presentation.components.HeaderText
 
 @Composable
-fun CustomDialog(
+fun UMCustomDialog(
     title: String,
     headerContent: @Composable () -> Unit,
     bodyContent: @Composable () -> Unit,

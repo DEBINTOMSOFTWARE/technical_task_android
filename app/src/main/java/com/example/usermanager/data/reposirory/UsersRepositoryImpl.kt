@@ -12,6 +12,7 @@ import com.example.usermanager.utils.mapHttpExceptionToDomainError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import retrofit2.Response
 
 import java.io.IOException
 import javax.inject.Inject
@@ -61,6 +62,24 @@ class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService
                 emit(Resource.Success(responseData))
             } else {
                 emit(Resource.Error(ErrorEntity.Unknown("Add User Failed")))
+            }
+        } catch (e: HttpException) {
+            emit(Resource.Error(mapHttpExceptionToDomainError(e)))
+        } catch (e: IOException) {
+            emit(Resource.Error(ErrorEntity.Network))
+        } catch (e: Exception) {
+            emit(Resource.Error(ErrorEntity.Unknown(e.localizedMessage ?: "An error occurred")))
+        }
+    }
+
+    override fun deleteUser(userId: Int): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = apiService.deleteUser(userId)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(ErrorEntity.Unknown("Error deleting user")))
             }
         } catch (e: HttpException) {
             emit(Resource.Error(mapHttpExceptionToDomainError(e)))

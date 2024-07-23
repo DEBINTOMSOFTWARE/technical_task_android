@@ -9,5 +9,6 @@ object TestConstants {
     const val NAME = "Jesse Pinkman"
     const val STATUS = "Active"
     const val PAGE = 1
+    const val USER_ID = 1
 }
 

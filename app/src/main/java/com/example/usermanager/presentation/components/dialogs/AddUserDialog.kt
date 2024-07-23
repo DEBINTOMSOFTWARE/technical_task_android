@@ -47,7 +47,7 @@ fun AddUserDialog(
         }
     }
 
-    CustomDialog(
+    UMCustomDialog(
         title = title,
         headerContent = { },
         bodyContent = {

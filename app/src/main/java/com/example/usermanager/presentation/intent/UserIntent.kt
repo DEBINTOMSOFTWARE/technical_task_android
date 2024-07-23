@@ -8,5 +8,10 @@ sealed class UserIntent {
         val gender: String,
         val status: String
     ) : UserIntent()
-    data object ExitUser: UserIntent()
+
+    data class DeleteUser(
+        val userId: Int
+    ) : UserIntent()
+
+    data object ExitUser : UserIntent()
 }

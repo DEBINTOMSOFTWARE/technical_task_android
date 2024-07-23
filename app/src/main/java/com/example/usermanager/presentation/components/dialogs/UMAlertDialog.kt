@@ -7,25 +7,26 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.usermanager.R
 import com.example.usermanager.presentation.components.BodySmallText
 import com.example.usermanager.presentation.components.BodyText
-import com.example.usermanager.presentation.components.HeaderText
 
 @Composable
-fun ErrorDialog(
+fun UMAlertDialog(
     title: String,
     headerText: String,
     bodyText: String,
     onDismiss: () -> Unit,
-    onTryAgain: () -> Unit,
-    onExit: () -> Unit,
+    onPositiveButtonClick: () -> Unit,
+    onNegativeButtonClick: () -> Unit,
+    positiveButtonText: String = stringResource(id = R.string.try_again_label),
+    negativeButtonText: String = stringResource(id = R.string.exit_label)
 ) {
-    CustomDialog(
+    UMCustomDialog(
         title = title,
         headerContent = { BodyText(text = headerText, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.error) },
         bodyContent = { BodySmallText(text = bodyText) },
         onDismiss = onDismiss,
-        onPositiveButtonClick = onTryAgain,
-        onNegativeButtonClick = onExit,
-        positiveButtonText = stringResource(id = R.string.try_again_label),
-        negativeButtonText = stringResource(id = R.string.exit_label)
+        onPositiveButtonClick = onPositiveButtonClick,
+        onNegativeButtonClick = onNegativeButtonClick,
+        positiveButtonText = positiveButtonText,
+        negativeButtonText = negativeButtonText
     )
 }

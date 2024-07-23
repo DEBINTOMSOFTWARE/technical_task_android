@@ -39,7 +39,7 @@ import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.presentation.components.BodyText
 import com.example.usermanager.presentation.components.UserItemView
 import com.example.usermanager.presentation.components.dialogs.AddUserDialog
-import com.example.usermanager.presentation.components.dialogs.ErrorDialog
+import com.example.usermanager.presentation.components.dialogs.UMAlertDialog
 import com.example.usermanager.presentation.intent.UserIntent
 import com.example.usermanager.presentation.viewmodel.UsersViewModel
 import com.example.usermanager.utils.ErrorEntity
@@ -56,6 +56,7 @@ fun UserListScreen(
         usersViewModel.onIntent(UserIntent.LoadUsers)
     }
     var showAddUserDialog by remember { mutableStateOf(false) }
+    var selectedUser by remember { mutableStateOf<UserItemEntity?>(null) }
     Scaffold(
         scaffoldState = rememberScaffoldState(),
         topBar = {
@@ -92,70 +93,88 @@ fun UserListScreen(
                 uiState.error != null -> {
                     when (uiState.error) {
                         ErrorEntity.Network -> {
-                            ErrorDialog(
-                                title = "Error !",
+                            UMAlertDialog(
+                                title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.network_unavailable_header_label),
                                 bodyText = stringResource(id = R.string.network_unavailable_body_label),
                                 onDismiss = { },
-                                onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
+                                onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
                         ErrorEntity.NotFound -> {
-                            ErrorDialog(
-                                title = "Error !",
+                            UMAlertDialog(
+                                title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.user_not_found_header_label),
                                 bodyText = stringResource(id = R.string.user_not_found_body_label),
                                 onDismiss = { },
-                                onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
+                                onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
                         ErrorEntity.AccessDenied -> {
-                            ErrorDialog(
-                                title = "Error !",
+                            UMAlertDialog(
+                                title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.access_denied_header_label),
                                 bodyText = stringResource(id = R.string.access_denied_body_label),
                                 onDismiss = { },
-                                onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
+                                onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
                         ErrorEntity.ServiceUnavailable -> {
-                            ErrorDialog(
-                                title = "Error !",
+                            UMAlertDialog(
+                                title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.service_unavailable_header_label),
                                 bodyText = stringResource(id = R.string.service_unavailable_body_label),
                                 onDismiss = { },
-                                onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
+                                onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
 
                         else -> {
-                            ErrorDialog(
-                                title = "Error !",
+                            UMAlertDialog(
+                                title = stringResource(R.string.error_title_label),
                                 headerText = stringResource(id = R.string.unknown_error_header_label),
                                 bodyText = stringResource(id = R.string.unknown_error_body_label),
                                 onDismiss = { },
-                                onTryAgain = { usersViewModel.processIntents(UserIntent.LoadUsers) },
-                                onExit = { usersViewModel.processIntents(UserIntent.ExitUser) }
+                                onPositiveButtonClick = { usersViewModel.processIntents(UserIntent.LoadUsers) },
+                                onNegativeButtonClick = { usersViewModel.processIntents(UserIntent.ExitUser) }
                             )
                         }
                     }
                 }
 
                 uiState.users.isNotEmpty() -> {
-                    showUsersList(users = uiState.users)
+                    showUsersList(users = uiState.users, onLongPressUser = { user ->
+                        selectedUser = user
+                    })
                 }
 
                 uiState.exit -> {
                     val context = LocalContext.current
                     (context as? MainActivity)?.finish()
                 }
+            }
+
+            selectedUser?.let { user ->
+                UMAlertDialog(
+                    title = stringResource(R.string.delete_user_title_label),
+                    headerText = "",
+                    bodyText = stringResource(R.string.delete_user_body_label),
+                    onDismiss = { },
+                    onPositiveButtonClick = {
+                        usersViewModel.processIntents(UserIntent.DeleteUser(user.id))
+                        selectedUser = null
+                    },
+                    onNegativeButtonClick = { selectedUser = null },
+                    positiveButtonText = stringResource(R.string.delete_button_label),
+                    negativeButtonText = stringResource(id = R.string.cancel_label)
+                )
             }
         }
     }
@@ -167,7 +186,14 @@ fun UserListScreen(
             onAddUser = { name, email, gender, isActive ->
                 println("Name: $name, Email: $email")
                 println("Gender: $gender, Status: $isActive")
-                usersViewModel.processIntents(UserIntent.AddUser(name, email, gender, if (isActive) "Active" else "Inactive"))
+                usersViewModel.processIntents(
+                    UserIntent.AddUser(
+                        name,
+                        email,
+                        gender,
+                        if (isActive) "Active" else "Inactive"
+                    )
+                )
                 showAddUserDialog = false
             }
         )
@@ -177,6 +203,7 @@ fun UserListScreen(
 @Composable
 fun showUsersList(
     users: List<UserItemEntity>,
+    onLongPressUser: (UserItemEntity) -> Unit
 ) {
     val usesListLabel = "Users List"
     val state = rememberLazyListState()
@@ -187,7 +214,9 @@ fun showUsersList(
         verticalArrangement = Arrangement.Top
     ) {
         items(users) { user ->
-            UserItemView(user)
+            UserItemView(user, onLongPress = {
+                onLongPressUser(user)
+            })
         }
     }
 }

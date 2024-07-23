@@ -3,6 +3,8 @@ package com.example.usermanager.domain.usecase
 import com.example.usermanager.TestConstants
 import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.repository.UsersRepository
+import com.example.usermanager.domain.usecase.getusers.GetUsers
+import com.example.usermanager.domain.usecase.getusers.GetUsersImpl
 import com.example.usermanager.utils.ErrorEntity
 import com.example.usermanager.utils.Resource
 import io.mockk.coEvery

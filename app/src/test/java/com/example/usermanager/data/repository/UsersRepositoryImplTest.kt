@@ -144,5 +144,28 @@ class UsersRepositoryImplTest {
         assertTrue { result[0] is Resource.Loading }
         assertTrue { result[1] is Resource.Error }
     }
+
+    @Test
+    fun givenApiServiceReturnsData_whenDeleteUserIsCalled_thenReturnData() = runTest {
+        val mockResponse = MockResponse()
+            .setResponseCode(204)
+        mockWebServer.enqueue(mockResponse)
+        val result = usersRepository.deleteUser(TestConstants.USER_ID).toList()
+        assertEquals(2, result.size)
+        assertTrue { result[0] is Resource.Loading }
+        assertTrue { result[1] is Resource.Success }
+    }
+
+    @Test
+    fun givenApiServiceReturnsError_whenDeleteUserIsCalled_thenReturnError() = runTest {
+        val errorResponse = MockResponse()
+            .setResponseCode(500)
+        mockWebServer.enqueue(errorResponse)
+        val result = usersRepository.deleteUser(TestConstants.USER_ID).toList()
+        assertEquals(2, result.size)
+        assertTrue { result[0] is Resource.Loading }
+        assertTrue { result[1] is Resource.Error }
+    }
+
 }
 

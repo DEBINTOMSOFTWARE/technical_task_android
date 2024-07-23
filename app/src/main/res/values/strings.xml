@@ -18,4 +18,8 @@
     <string name="user_not_found_body_label">Please check the URL or try searching for what you need.</string>
     <string name="unknown_error_header_label">An unknown error occurred</string>
     <string name="unknown_error_body_label">We\'re not sure what happened, but we\'re working on getting it fixed as soon as possible.</string>
+    <string name="delete_user_body_label">Do you really want to delete user?</string>
+    <string name="delete_user_title_label">Delete User</string>
+    <string name="delete_button_label">Delete</string>
+    <string name="error_title_label">Error !</string>
 </resources>

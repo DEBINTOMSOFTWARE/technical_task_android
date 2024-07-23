@@ -1,11 +1,12 @@
 package com.example.usermanager.framework.di
 
 import com.example.usermanager.domain.repository.UsersRepository
-import com.example.usermanager.domain.usecase.GetUsers
-import com.example.usermanager.domain.usecase.GetUsersImpl
+import com.example.usermanager.domain.usecase.getusers.GetUsers
+import com.example.usermanager.domain.usecase.getusers.GetUsersImpl
 import com.example.usermanager.domain.usecase.adduser.AddUser
 import com.example.usermanager.domain.usecase.adduser.AddUserImpl
-import com.example.usermanager.presentation.intent.UserIntent
+import com.example.usermanager.domain.usecase.deleteUser.DeleteUser
+import com.example.usermanager.domain.usecase.deleteUser.DeleteUserImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +26,11 @@ object ViewModelModule {
     @ViewModelScoped
     fun providesAddUser(usersRepository: UsersRepository): AddUser =
         AddUserImpl(usersRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun providesDeleteUser(usersRepository: UsersRepository): DeleteUser =
+        DeleteUserImpl(usersRepository)
+
 
 }
