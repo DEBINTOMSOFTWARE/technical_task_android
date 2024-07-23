@@ -22,4 +22,6 @@
     <string name="delete_user_title_label">Delete User</string>
     <string name="delete_button_label">Delete</string>
     <string name="error_title_label">Error !</string>
+    <string name="users_list_label">Users List</string>
+    <string name="add_user_icon_label">Add User Icon</string>
 </resources>

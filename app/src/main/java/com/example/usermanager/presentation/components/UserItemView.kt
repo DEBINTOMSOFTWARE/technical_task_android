@@ -9,6 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.usermanager.R
@@ -27,6 +31,9 @@ fun UserItemView(user: UserItemEntity, onLongPress: () -> Unit) {
                         onLongPress()
                     }
                 )
+            }.semantics {
+                role = Role.Button
+                contentDescription = "${user.name}, ${user.email}, ${user.gender}, ${user.status}"
             }
     ) {
         Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))) {

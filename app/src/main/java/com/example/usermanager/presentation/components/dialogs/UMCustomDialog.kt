@@ -14,6 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,7 +42,9 @@ fun UMCustomDialog(
             BodyText(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 16.dp).semantics {
+                        contentDescription = title
+                    },
                 text = title,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -59,11 +65,17 @@ fun UMCustomDialog(
                     .padding(dimensionResource(id = R.dimen.padding_medium)),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = onNegativeButtonClick) {
+                TextButton(onClick = onNegativeButtonClick, modifier = Modifier.semantics {
+                    role = Role.Button
+                    contentDescription = negativeButtonText
+                }) {
                     BodySmallText(text = negativeButtonText)
                 }
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.margin_small)))
-                TextButton(onClick = onPositiveButtonClick) {
+                TextButton(onClick = onPositiveButtonClick, modifier = Modifier.semantics {
+                    role = Role.Button
+                    contentDescription = positiveButtonText
+                }) {
                     BodySmallText(text = positiveButtonText)
                 }
             }

@@ -20,6 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.sp
 import com.example.usermanager.R
 import com.example.usermanager.presentation.components.BodySmallText
@@ -54,7 +58,9 @@ fun AddUserDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.margin_medium)),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_normal))
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_normal)).semantics {
+                    contentDescription = title
+                }
             ) {
                 TextField(
                     value = name, onValueChange = {
@@ -66,7 +72,8 @@ fun AddUserDialog(
                                 R.string.name_label
                             ), fontSize = dimenResource(
                                 id = R.dimen.font_size_extra_small
-                            ).sp
+                            ).sp,
+                            modifier = Modifier.semantics { contentDescription = "Please enter the Name" }
                         )
                     },
                     isError = nameError != null
@@ -83,7 +90,8 @@ fun AddUserDialog(
                         BodySmallText(
                             text = stringResource(R.string.email_label), fontSize = dimenResource(
                                 id = R.dimen.font_size_extra_small
-                            ).sp
+                            ).sp,
+                            modifier = Modifier.semantics { contentDescription = "Please enter the Mail Id" }
                         )
                     },
                     isError = emailError != null
@@ -107,7 +115,8 @@ fun AddUserDialog(
                         BodySmallText(
                             text = stringResource(R.string.gender_label), fontSize = dimenResource(
                                 id = R.dimen.font_size_extra_small
-                            ).sp
+                            ).sp,
+                            modifier = Modifier.semantics { contentDescription = "Please enter the Gender" }
                         )
                     },
                     isError = genderError != null
@@ -126,11 +135,17 @@ fun AddUserDialog(
                         .fillMaxWidth()
                         .padding(top = dimensionResource(id = R.dimen.padding_small))
                 ) {
-                    BodySmallText(text = if (isActive) "Active" else "Inactive")
+                    BodySmallText(text = if (isActive) "Active" else "Inactive", modifier = Modifier.semantics {
+                        contentDescription = if (isActive) "Currently in Active" else "Currently in Inactive"
+                    })
                     Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.margin_medium)))
                     Switch(
                         checked = isActive,
                         onCheckedChange = { isChecked -> isActive = isChecked },
+                        modifier = Modifier.semantics {
+                            role = Role.Switch
+                            contentDescription = "Switch to change status"
+                        }
                     )
                 }
             }

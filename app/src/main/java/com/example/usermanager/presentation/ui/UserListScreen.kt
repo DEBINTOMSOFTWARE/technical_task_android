@@ -29,7 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import com.example.usermanager.MainActivity
 import com.example.usermanager.R
@@ -48,6 +50,7 @@ fun UserListScreen(
     usersViewModel: UsersViewModel
 ) {
     val appBarTitle = stringResource(id = R.string.app_name)
+    val addUserIcon = stringResource(R.string.add_user_icon_label)
     val uiState by usersViewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         usersViewModel.onIntent(UserIntent.LoadUsers)
@@ -64,6 +67,9 @@ fun UserListScreen(
         }, backgroundColor = MaterialTheme.colorScheme.primary, actions = {
             IconButton(onClick = {
                 showAddUserDialog = true
+            }, modifier = Modifier.semantics {
+                role = Role.Button
+                contentDescription = addUserIcon
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -182,7 +188,7 @@ fun UserListScreen(
 fun ShowUsersList(
     users: List<UserItemEntity>, onLongPressUser: (UserItemEntity) -> Unit
 ) {
-    val usesListLabel = "Users List"
+    val usesListLabel = stringResource(R.string.users_list_label)
     val state = rememberLazyListState()
     LazyColumn(
         state = state,
