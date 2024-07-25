@@ -9,7 +9,7 @@ Language: Kotlin
 UI Framework: Jetpack Compose
 Dependency Injection: Hilt
 Asynchronous Programming: Kotlin Coroutines and Flow
-Testing: Unit tests for all layers (Repository, Use Cases, ViewModel)
+Testing: Unit tests for layers (Repository, Use Cases)
 
 ## Features
 
