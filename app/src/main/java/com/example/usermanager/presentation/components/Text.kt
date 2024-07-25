@@ -36,7 +36,7 @@ fun HeaderText(
 fun BodyText(
     text: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.End,
+    textAlign: TextAlign = TextAlign.Start,
     fontWeight: FontWeight = FontWeight.Normal,
     color: Color = MaterialTheme.colorScheme.surface,
     fontSize: TextUnit = dimenResource(id = R.dimen.font_size_normal).sp

@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,11 +53,13 @@ fun UserListScreen(
     val appBarTitle = stringResource(id = R.string.app_name)
     val addUserIcon = stringResource(R.string.add_user_icon_label)
     val uiState by usersViewModel.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         usersViewModel.onIntent(UserIntent.LoadUsers)
     }
     var showAddUserDialog by remember { mutableStateOf(false) }
-    var selectedUser by remember { mutableStateOf<UserItemEntity?>(null) }
+    var selectedUser by rememberSaveable { mutableStateOf<UserItemEntity?>(null) }
+
     Scaffold(scaffoldState = rememberScaffoldState(), topBar = {
         TopAppBar(modifier = Modifier
             .height(dimensionResource(id = R.dimen.app_bar_height))

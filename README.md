@@ -3,7 +3,7 @@
 UserManager is an Android application developed as part of the Sliide Android developer challenge. It's a simple yet powerful tool for managing users, leveraging the public API from https://gorest.co.in/. The app demonstrates modern Android development practices and showcases a range of technical skills.
 ## Project Details
 Architecture: MVI (Model-View-Intent) following clean code architecture principles
-Minimum SDK: 21
+Minimum SDK: 24
 Language: Kotlin
 UI Framework: Jetpack Compose
 Dependency Injection: Hilt

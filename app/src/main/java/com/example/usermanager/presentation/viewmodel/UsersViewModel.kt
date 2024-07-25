@@ -1,8 +1,10 @@
 package com.example.usermanager.presentation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.usermanager.domain.model.AddUserRequestDataEntity
+import com.example.usermanager.domain.model.UserItemEntity
 import com.example.usermanager.domain.usecase.adduser.AddUser
 import com.example.usermanager.domain.usecase.deleteUser.DeleteUser
 import com.example.usermanager.domain.usecase.getusers.GetUsers
@@ -23,7 +25,8 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(
     private val getUsersUseCase: GetUsers,
     private val addUserUseCase: AddUser,
-    private val deleteUserUseCase: DeleteUser
+    private val deleteUserUseCase: DeleteUser,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UsersUIState())
@@ -32,11 +35,17 @@ class UsersViewModel @Inject constructor(
     private val _intent = MutableSharedFlow<UserIntent>()
     private val intent: SharedFlow<UserIntent> = _intent
 
+    init {
+        savedStateHandle.get<List<UserItemEntity>>("users")?.let { users ->
+            _uiState.value = _uiState.value.copy(users = users)
+        } ?: run {
+            processIntents(UserIntent.LoadUsers)
+        }
+    }
 
     fun onIntent(userIntent: UserIntent) {
         viewModelScope.launch {
             _intent.emit(userIntent)
-            processIntents(userIntent)
         }
     }
 
@@ -103,7 +112,7 @@ class UsersViewModel @Inject constructor(
                             val newUser = resource.data
                             if (newUser != null) {
                                 val updatedUsers =
-                                    listOf(newUser) + _uiState.value.users  // Append new user to existing list
+                                    listOf(newUser) + _uiState.value.users
                                 _uiState.value = _uiState.value.copy(
                                     user = newUser,
                                     users = updatedUsers,
@@ -143,22 +152,13 @@ class UsersViewModel @Inject constructor(
                         }
 
                         is Resource.Success -> {
-                            if (_uiState.value.users.isNotEmpty()) {
-                                val updatedUsers = _uiState.value.users.filter { it.id != userId }
-                                _uiState.value = _uiState.value.copy(
-                                    users = updatedUsers,
-                                    isLoading = false,
-                                    error = null,
-                                    user = null
-                                )
-                            } else {
-                                _uiState.value = _uiState.value.copy(
-                                    users = _uiState.value.users,
-                                    isLoading = false,
-                                    error = null,
-                                    user = null
-                                )
-                            }
+                            val updatedUsers = _uiState.value.users.filter { it.id != userId }
+                            _uiState.value = _uiState.value.copy(
+                                users = updatedUsers,
+                                isLoading = false,
+                                error = null,
+                                user = null
+                            )
                         }
 
                         is Resource.Error -> {

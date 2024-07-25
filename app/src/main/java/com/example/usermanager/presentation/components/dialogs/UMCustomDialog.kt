@@ -47,7 +47,7 @@ fun UMCustomDialog(
                     },
                 text = title,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center
             )
         },
@@ -69,14 +69,14 @@ fun UMCustomDialog(
                     role = Role.Button
                     contentDescription = negativeButtonText
                 }) {
-                    BodySmallText(text = negativeButtonText)
+                    BodySmallText(text = negativeButtonText, color = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.margin_small)))
                 TextButton(onClick = onPositiveButtonClick, modifier = Modifier.semantics {
                     role = Role.Button
                     contentDescription = positiveButtonText
                 }) {
-                    BodySmallText(text = positiveButtonText)
+                    BodySmallText(text = positiveButtonText, color = MaterialTheme.colorScheme.primary)
                 }
             }
         }

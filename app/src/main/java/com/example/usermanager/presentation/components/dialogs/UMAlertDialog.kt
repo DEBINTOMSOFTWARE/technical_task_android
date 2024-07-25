@@ -21,8 +21,8 @@ fun UMAlertDialog(
 ) {
     UMCustomDialog(
         title = title,
-        headerContent = { BodyText(text = headerText, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.error) },
-        bodyContent = { BodySmallText(text = bodyText) },
+        headerContent = { BodySmallText(text = headerText, color = MaterialTheme.colorScheme.error) },
+        bodyContent = { BodySmallText(text = bodyText, color = MaterialTheme.colorScheme.onPrimary) },
         onDismiss = onDismiss,
         onPositiveButtonClick = onPositiveButtonClick,
         onNegativeButtonClick = onNegativeButtonClick,
