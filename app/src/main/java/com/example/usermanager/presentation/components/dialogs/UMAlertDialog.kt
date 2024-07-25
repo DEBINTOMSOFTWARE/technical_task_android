@@ -3,10 +3,8 @@ package com.example.usermanager.presentation.components.dialogs
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import com.example.usermanager.R
 import com.example.usermanager.presentation.components.BodySmallText
-import com.example.usermanager.presentation.components.BodyText
 
 @Composable
 fun UMAlertDialog(
